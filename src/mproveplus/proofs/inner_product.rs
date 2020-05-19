@@ -127,8 +127,7 @@ impl InnerProductProof {
 
             let u = transcript.challenge_scalar(b"u");
             let u_inv = u.invert();
-            println!("1.challenge u: {:?}", u);
-
+            
             for i in 0..n {
                 a_L[i] = a_L[i] * u + u_inv * a_R[i];
                 b_L[i] = b_L[i] * u_inv + u * b_R[i];

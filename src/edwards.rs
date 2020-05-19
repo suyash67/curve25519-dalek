@@ -595,6 +595,12 @@ impl EdwardsPoint {
     /// Note that when the conversion from Montgomery to Edwards point
     /// returns `None`, We slightly modify the input array and keep 
     /// doing it until we get a valid `EdwardsPoint` as the output.
+    ///
+    /// Currently we change the encoded point by multiply by 8 to make
+    /// sure it is in the sub group of prime order. This is because for
+    /// our use cases so far it doesn't matter and multiply by 8 is 
+    /// faster than testing for a point in the sub group prime order.
+    /// 
     pub fn from_uniform_bytes(bytes: &[u8; 64]) -> EdwardsPoint {
         let mut r_1_bytes = [0u8; 32];
         r_1_bytes.copy_from_slice(&bytes[0..32]);
@@ -636,6 +642,8 @@ impl EdwardsPoint {
 
         // Applying Elligator twice and adding the results ensures a
         // uniform distribution.
+        //
+        // Multiplying the result by 8 to ensure it lies in the correct subgroup.
         &Scalar::from(8u8)*(&E_1_opt.expect("First Edwards point!") + &E_2_opt.expect("Second Edwards point!"))
     }
 }
