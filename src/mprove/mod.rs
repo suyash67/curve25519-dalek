@@ -8,7 +8,7 @@ Link: https://github.com/suyash67/MProve-Ristretto
 */
 
 pub mod mprove_sigs;
-pub mod mprove;
+pub mod mprove_edwards;
 
 #[derive(Copy, PartialEq, Eq, Clone, Debug)]
 pub enum Errors {
