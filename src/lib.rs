@@ -88,6 +88,9 @@ pub mod traits;
 // MProvePlus simulation module.
 pub mod mproveplus;
 
+// MProve simulation module.
+pub mod mprove;
+
 //------------------------------------------------------------------------
 // curve25519-dalek internal modules
 //------------------------------------------------------------------------
