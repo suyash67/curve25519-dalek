@@ -45,6 +45,9 @@ packed_simd = { version = "0.3", features = ["into_bits"], optional = true }
 zeroize = { version = "1", default-features = false }
 sha2 = "0.8.1"
 rand = "0.7"
+merlin = { version = "2", default-features = false }
+sha3 = "0.8.2"
+thiserror = "1.0.18"
 
 [features]
 nightly = ["subtle/nightly"]

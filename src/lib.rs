@@ -47,6 +47,9 @@ extern crate rand_core;
 extern crate zeroize;
 extern crate sha2;
 extern crate rand;
+extern crate merlin;
+extern crate sha3;
+extern crate thiserror;
 
 // Used for traits related to constant-time code.
 extern crate subtle;
@@ -81,6 +84,9 @@ pub mod constants;
 
 // External (and internal) traits.
 pub mod traits;
+
+// MProvePlus simulation module.
+pub mod mproveplus;
 
 //------------------------------------------------------------------------
 // curve25519-dalek internal modules

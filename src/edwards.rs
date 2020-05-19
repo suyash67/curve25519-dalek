@@ -636,7 +636,7 @@ impl EdwardsPoint {
 
         // Applying Elligator twice and adding the results ensures a
         // uniform distribution.
-        &E_1_opt.expect("First Edwards point!") + &E_2_opt.expect("Second Edwards point!")
+        &Scalar::from(8u8)*(&E_1_opt.expect("First Edwards point!") + &E_2_opt.expect("Second Edwards point!"))
     }
 }
 
