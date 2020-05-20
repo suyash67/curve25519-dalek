@@ -1105,7 +1105,8 @@ mod test {
     use constants;
     use sha2::Sha512;
     use super::*;
-
+    use ristretto::{RistrettoPoint, CompressedRistretto};
+    
     /// X coordinate of the basepoint.
     /// = 15112221349535400772501151409588531511454012693041857206046113283949847762202
     static BASE_X_COORD_BYTES: [u8; 32] =
@@ -1160,6 +1161,53 @@ mod test {
         0xba, 0x20, 0x37, 0x1a, 0x23, 0x64, 0x59, 0xc4,
         0xc0, 0x46, 0x83, 0x43, 0xde, 0x70, 0x4b, 0x85,
         0x09, 0x6f, 0xfe, 0x35, 0x4f, 0x13, 0x2b, 0x42]);
+
+    /// Test the Ristretto encoding of random public keys of Monero
+    #[test]
+    fn edwards_to_ristretto(){
+        let mut rng = rand::thread_rng();
+
+        let iter = 100000;
+        let mut matched = 0;
+        let mut rs_pubkeys: Vec<CompressedRistretto> = Vec::with_capacity(iter);
+        let mut count = 0;
+
+        for _ in 0..iter {
+
+            // Compute a random Monero pubkey
+            let scalar = Scalar::random(&mut rng);
+            let ed_bp = constants::ED25519_BASEPOINT_POINT;
+            let ed_pubkey = scalar * ed_bp;
+
+            // Convert to [2](E)
+            let ed_pubkey_double = Scalar::from(2u8) * ed_pubkey;
+            
+            // Read pubkey as a Ristretto point
+            let rs_pubkey = RistrettoPoint(ed_pubkey_double);
+
+            // Compress the Ristretto pubkey
+            let s = rs_pubkey.compress();
+
+            let rs_from_s_opt = s.decompress();
+
+            if rs_from_s_opt != None {
+                count = count + 1;
+
+                if rs_pubkeys.iter().any(|v| v == &s) {
+                    matched = matched + 1;
+                }
+                rs_pubkeys.push(s);
+            }
+
+            // // Check if secret key is preserved
+            // let rs_from_s = rs_from_s_opt.expect("Ristretto from encoding failed!");
+            // let rs_pubkey_computed = scalar * constants::RISTRETTO_BASEPOINT_POINT;
+            // assert_eq!(rs_pubkey_computed, rs_from_s);
+        }
+        println!("Num of Monero pubkeys on Ristretto: {:?}", count);
+        println!("Num of Unique Monero pubkeys on Ristretto: {:?}", iter-matched);
+
+    }
 
     /// Test round-trip decompression for the basepoint.
     #[test]
