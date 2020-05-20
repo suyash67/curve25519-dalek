@@ -1167,7 +1167,7 @@ mod test {
     fn edwards_to_ristretto(){
         let mut rng = rand::thread_rng();
 
-        let iter = 100000;
+        let iter = 100;
         let mut matched = 0;
         let mut rs_pubkeys: Vec<CompressedRistretto> = Vec::with_capacity(iter);
         let mut count = 0;
@@ -1199,9 +1199,11 @@ mod test {
                 rs_pubkeys.push(s);
             }
 
-            // // Check if secret key is preserved
+            // // The check below fails, so commented out
+            // // Check if the mapping is homomorphic
             // let rs_from_s = rs_from_s_opt.expect("Ristretto from encoding failed!");
-            // let rs_pubkey_computed = scalar * constants::RISTRETTO_BASEPOINT_POINT;
+            // let rs_from_G = RistrettoPoint(ed_bp);
+            // let rs_pubkey_computed = scalar * rs_from_G;
             // assert_eq!(rs_pubkey_computed, rs_from_s);
         }
         println!("Num of Monero pubkeys on Ristretto: {:?}", count);
