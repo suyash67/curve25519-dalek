@@ -1167,7 +1167,7 @@ mod test {
     fn edwards_to_ristretto(){
         let mut rng = rand::thread_rng();
 
-        let iter = 100;
+        let iter = 1000;
         let mut matched = 0;
         let mut rs_pubkeys: Vec<CompressedRistretto> = Vec::with_capacity(iter);
         let mut count = 0;
@@ -1179,11 +1179,8 @@ mod test {
             let ed_bp = constants::ED25519_BASEPOINT_POINT;
             let ed_pubkey = scalar * ed_bp;
 
-            // Convert to [2](E)
-            let ed_pubkey_double = Scalar::from(2u8) * ed_pubkey;
-            
             // Read pubkey as a Ristretto point
-            let rs_pubkey = RistrettoPoint(ed_pubkey_double);
+            let rs_pubkey = RistrettoPoint(ed_pubkey);
 
             // Compress the Ristretto pubkey
             let s = rs_pubkey.compress();
@@ -1199,12 +1196,12 @@ mod test {
                 rs_pubkeys.push(s);
             }
 
-            // // The check below fails, so commented out
-            // // Check if the mapping is homomorphic
-            // let rs_from_s = rs_from_s_opt.expect("Ristretto from encoding failed!");
-            // let rs_from_G = RistrettoPoint(ed_bp);
-            // let rs_pubkey_computed = scalar * rs_from_G;
-            // assert_eq!(rs_pubkey_computed, rs_from_s);
+            // Check if the mapping is homomorphic
+            let rs_from_s = rs_from_s_opt.expect("Ristretto from encoding failed!");
+            // Base point of Edwards lies in Ristretto is known!
+            let rs_from_G = RistrettoPoint(ed_bp);
+            let rs_pubkey_computed = scalar * rs_from_G;
+            assert_eq!(rs_pubkey_computed, rs_from_s);
         }
         println!("Num of Monero pubkeys on Ristretto: {:?}", count);
         println!("Num of Unique Monero pubkeys on Ristretto: {:?}", iter-matched);
