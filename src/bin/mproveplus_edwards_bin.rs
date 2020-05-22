@@ -6,7 +6,7 @@ extern crate time;
 
 use structopt::StructOpt;
 use time::{PreciseTime};
-use curve25519_dalek::mproveplus::proofs::mprove_plus_ristretto::MProvePlus;
+use curve25519_dalek::mproveplus::proofs::mprove_plus_edwards::MProvePlus;
 
 #[derive(Debug, StructOpt)]
 #[structopt(name = "mprove-plus", about = "MProvePlus proof generation simulator using Edwards curve.")]
