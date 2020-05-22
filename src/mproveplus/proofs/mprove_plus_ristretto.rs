@@ -457,19 +457,27 @@ impl MProvePlus {
         let zero_append_vec = vec![Scalar::zero();res];
 
         // Append 0s to secret vectors
-        let mut a = Lp.clone();
-        let mut b = Rp.clone();
+        let mut a: Vec<Scalar> = Vec::with_capacity(N);
+        let mut b: Vec<Scalar> = Vec::with_capacity(N);
+        // let mut a = Lp.clone();
+        // let mut b = Rp.clone();
+        a.extend_from_slice(&Lp);
+        b.extend_from_slice(&Rp);
         a.extend_from_slice(&zero_append_vec);
         b.extend_from_slice(&zero_append_vec);
 
         // Multipliers of base vectors
         let G_factors: Vec<Scalar> = iter::repeat(Scalar::one()).take(N).collect();
-        let mut H_factors: Vec<Scalar> = theta_inv.clone();
+        let mut H_factors: Vec<Scalar> = Vec::with_capacity(N);
+        // let mut H_factors: Vec<Scalar> = theta_inv.clone();
+        H_factors.extend_from_slice(&theta_inv);
         H_factors.extend_from_slice(&vec![Scalar::one(); res]);
 
         // Append random group generators to g_vec_w and hi_tag        
-        let mut g_vec_long = g_vec_w.clone();
+        // let mut g_vec_long = g_vec_w.clone();
+        let mut g_vec_long: Vec<EdwardsPoint> = Vec::with_capacity(N);
         let mut h_vec_long: Vec<EdwardsPoint> = Vec::with_capacity(N);
+        g_vec_long.extend_from_slice(&g_vec_w);
         g_vec_long.extend_from_slice(&g_vec_append);
         h_vec_long.extend_from_slice(&h_vec);
         h_vec_long.extend_from_slice(&h_vec_append);
